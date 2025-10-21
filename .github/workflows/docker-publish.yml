@@ -37,9 +37,9 @@ jobs:
       - name: Run commands on remote host
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ vars.REMOTE_HOST }}
-          username: ${{ vars.REMOTE_USER }}
-          port: ${{ vars.REMOTE_PORT }}
+          host: ${{ vars.HOST }}
+          username: ${{ vars.USER }}
+          port: ${{ vars.PORT }}
           key: ${{ secrets.K8S_CLUSTER_SSH_KEY_PAIR }}
           script_stop: true
           script: |
