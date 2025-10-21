@@ -4,15 +4,16 @@ metadata:
   name: eventos-web
   namespace: eventos
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
     - http:
         paths:
-          - path: /eventos
-            pathType: Prefix
+          - path: /eventos(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: eventos-web
