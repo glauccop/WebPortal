@@ -44,5 +44,12 @@ jobs:
           script_stop: true
           script: |
             cd ~/APPS-NAMESPACE/eventos/
-            
-            kubectl get ing -A
+            wget -q --show-progress --progress=bar:force:noscroll \
+            -O manifests.yaml \
+            https://raw.githubusercontent.com/glauccop/WebPortal/main/k8s/manifests.yaml
+            kubectl apply -f manifests.yaml
+            sleep 5
+            kubectl -n eventos get deploy -o wide
+            kubectl -n eventos get pods -o wide
+            kubectl -n eventos get svc -o wide
+            kubectl -n eventos get ing
