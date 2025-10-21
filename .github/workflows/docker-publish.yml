@@ -28,3 +28,21 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/eventos-static:latest
           #tags: ${{ secrets.DOCKERHUB_USERNAME }}/eventos-static:latest,${{ secrets.DOCKERHUB_USERNAME }}/eventos-static:${{ github.run_number }}
+          
+  deploy-desenvolvimento:
+    runs-on: ubuntu-latest
+    needs: docker
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run commands on remote host
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.REMOTE_HOST }}
+          username: ${{ vars.REMOTE_USER }}
+          port: ${{ vars.REMOTE_PORT }}
+          key: ${{ secrets.K8S_CLUSTER_SSH_KEY_PAIR }}
+          script_stop: true
+          script: |
+            cd ~/APPS-NAMESPACE/eventos/
+            
+            kubectl get ing -A

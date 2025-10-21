@@ -1,0 +1,93 @@
+
+###################################################################################################
+##  Aplicacao WebPortal
+##  
+##  kubectl apply -f https://raw.githubusercontent.com/glauccop/WebPortal/main/k8s/manifests.yaml
+###################################################################################################
+
+# namespace - manifest
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: eventos
+
+------------------
+
+# deploy manifest
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventos-web
+  namespace: eventos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventos-web
+  template:
+    metadata:
+      labels:
+        app: eventos-web
+    spec:
+      containers:
+        - name: web
+          image: DOCKERHUB_USER/eventos-static:latest
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 20
+
+
+----------------
+
+# service manifest
+apiVersion: v1
+kind: Service
+metadata:
+  name: eventos-web
+  namespace: eventos
+spec:
+  selector:
+    app: eventos-web
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  type: ClusterIP
+
+
+---------------
+
+# ingress manifest
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eventos-web
+  namespace: eventos
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /eventos(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: eventos-web
+                port:
+                  number: 80
