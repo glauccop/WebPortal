@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventos-web
+  namespace: eventos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventos-web
+  template:
+    metadata:
+      labels:
+        app: eventos-web
+    spec:
+      containers:
+        - name: web
+          image: DOCKERHUB_USER/eventos-static:latest
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 20

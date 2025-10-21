@@ -1,0 +1,41 @@
+# build
+docker build -t SEU_USUARIO/eventos-static:latest .
+
+# rodar
+docker run --rm -p 8080:80 SEU_USUARIO/eventos-static:latest
+# abrir: http://localhost:8080
+
+# push (após login)
+docker login
+docker push SEU_USUARIO/eventos-static:latest
+
+
+
+----
+
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/deployment.yaml
+kubectl apply -f k8s/service.yaml
+kubectl apply -f k8s/ingress.yaml
+
+# Verificar
+kubectl -n eventos get all
+kubectl -n eventos get ingress
+
+
+
+-----
+
+Ajuste o nome do repositório Docker em:
+
+docker build -t SEU_USER/eventos-static:latest .
+
+docker push SEU_USER/eventos-static:latest
+
+deployment.yaml (image: SEU_USER/eventos-static:latest)
+
+Secrets do GitHub: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN
+
+Faça push na main → GitHub Actions publica a imagem.
+
+kubectl apply -f k8s/ → acesse por /eventos.

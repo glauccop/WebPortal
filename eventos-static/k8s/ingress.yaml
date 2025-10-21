@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: eventos-web
+  namespace: eventos
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /eventos/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: eventos-web
+                port:
+                  number: 80

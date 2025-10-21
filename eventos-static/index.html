@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Eventos BR — Compre sua atração</title>
+  <meta name="description" content="Exemplo de página estática para compra de atrações (demo)" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0f172a; --card:#111827; --muted:#94a3b8; --txt:#e5e7eb; --brand:#22d3ee; --brand-d:#0891b2; --ok:#22c55e; --warn:#f59e0b; }
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#0b1220,#0f172a);color:var(--txt);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    a{color:var(--brand)} .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+    .brand{display:flex;gap:10px;align-items:center}
+    .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),#6366f1)}
+    .title{font-weight:800;letter-spacing:.3px}
+    .cart{display:flex;align-items:center;gap:10px;background:#0b1220;border:1px solid #1f2937;padding:8px 12px;border-radius:12px}
+    .hero{margin:28px 0 18px;border:1px solid #1f2937;border-radius:20px;background:
+      radial-gradient(1200px 400px at 10% -10%, rgba(34,211,238,.18), transparent 50%),
+      radial-gradient(900px 300px at 90% 0%, rgba(99,102,241,.14), transparent 50%),
+      #0b1220; padding:28px}
+    .hero h1{margin:0 0 8px;font-size:28px;line-height:1.2}
+    .muted{color:var(--muted)}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+    @media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:680px){.grid{grid-template-columns:1fr}}
+    .card{background:rgba(17,24,39,.65);backdrop-filter: blur(6px);border:1px solid #1f2937;border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+    .thumb{height:160px;background-size:cover;background-position:center}
+    .card-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+    .badge{display:inline-flex;gap:6px;align-items:center;font-size:12px;color:#0b1220;background:linear-gradient(135deg,var(--brand),#8b5cf6);padding:6px 10px;border-radius:999px;font-weight:700}
+    .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .price{font-weight:800;font-size:18px}
+    select, input[type="number"], input[type="text"], input[type="email"]{
+      background:#0b1220;border:1px solid #1f2937;color:var(--txt);border-radius:10px;padding:8px 10px;width:100%
+    }
+    button{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+    .btn{background:linear-gradient(135deg,var(--brand),#6366f1);color:#0b1220}
+    .btn:hover{filter:brightness(1.05)}
+    .btn-ghost{background:transparent;color:var(--txt);border:1px solid #1f2937}
+    .footer{margin:28px 0 8px;color:var(--muted);font-size:14px;text-align:center}
+    /* modal */
+    .modal{position:fixed;inset:0;background:rgba(2,6,23,.65);display:none;align-items:center;justify-content:center;padding:16px}
+    .modal.open{display:flex}
+    .sheet{width:100%;max-width:520px;background:#0b1220;border:1px solid #1f2937;border-radius:18px;padding:18px}
+    .sheet h3{margin:0 0 8px}
+    .sheet .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .sheet .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
+    .pill{display:inline-flex;align-items:center;gap:6px;border:1px dashed #334155;color:var(--muted);border-radius:999px;padding:6px 10px;font-size:12px}
+    .ok{color:var(--ok)} .warn{color:var(--warn)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand"><div class="logo"></div><div class="title">Eventos BR</div></div>
+      <div class="cart">
+        <span id="cartCount">0</span> itens • <span id="cartTotal">R$ 0,00</span>
+        <button class="btn" id="btnCheckout" style="margin-left:8px">Finalizar</button>
+      </div>
+    </div>
+
+    <section class="hero">
+      <h1>Compre suas atrações com 1 clique</h1>
+      <div class="muted">Exemplo estático para demo em Docker/Kubernetes. Sem backend — fluxo simulado.</div>
+      <div class="muted" style="margin-top:6px">
+        <span class="pill"><span class="ok">●</span> Sem banco de dados</span>
+        <span class="pill"><span class="ok">●</span> Build Docker</span>
+        <span class="pill"><span class="ok">●</span> Ingress /k8s</span>
+        <span class="pill"><span class="warn">●</span> Pagamento fictício</span>
+      </div>
+    </section>
+
+    <section class="grid" id="cards">
+      <!-- Cards gerados via JS -->
+    </section>
+
+    <div class="footer">© <span id="year"></span> Eventos BR — Demo Estática</div>
+  </div>
+
+  <!-- Modal Checkout -->
+  <div class="modal" id="modal">
+    <div class="sheet">
+      <h3>Checkout</h3>
+      <div class="muted" style="margin-bottom:8px">Pagamento fictício apenas para demonstração.</div>
+      <div class="grid2">
+        <div>
+          <label>Nome</label>
+          <input id="name" type="text" placeholder="Seu nome" />
+        </div>
+        <div>
+          <label>E-mail</label>
+          <input id="email" type="email" placeholder="seu@email.com" />
+        </div>
+      </div>
+      <div style="margin-top:10px">
+        <label>Número do Cartão</label>
+        <input id="card" type="text" placeholder="0000 0000 0000 0000" />
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div>
+          <label>Validade (MM/AA)</label>
+          <input id="exp" type="text" placeholder="12/29" />
+        </div>
+        <div>
+          <label>CVV</label>
+          <input id="cvv" type="text" placeholder="123" />
+        </div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div class="muted">Total: <strong id="ckTotal">R$ 0,00</strong></div>
+        <div class="muted">Itens: <strong id="ckItems">0</strong></div>
+      </div>
+      <div class="actions">
+        <button class="btn-ghost" id="btnCancel">Cancelar</button>
+        <button class="btn" id="btnPay">Pagar (falso)</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const BRL = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+    const state = { cart: [] };
+    const produtos = [
+      { id:1, nome:"Show Rock Sunset", preco: 149.9, local:"Arena Sul", data:"25/11 20:00",
+        img:"https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?q=80&w=1600&auto=format&fit=crop" },
+      { id:2, nome:"Festival Tech Day", preco: 99.0, local:"Expo Center", data:"30/11 10:00",
+        img:"https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1600&auto=format&fit=crop" },
+      { id:3, nome:"Stand-up Night", preco: 79.5, local:"Teatro Centro", data:"05/12 21:00",
+        img:"https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=1600&auto=format&fit=crop" },
+      { id:4, nome:"Orquestra Sinfônica", preco: 129.0, local:"Sala Premium", data:"12/12 19:30",
+        img:"https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1600&auto=format&fit=crop" },
+      { id:5, nome:"Imersão Gastronomia", preco: 185.0, local:"Pavilhão Gourmet", data:"15/12 13:00",
+        img:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?q=80&w=1600&auto=format&fit=crop" },
+      { id:6, nome:"Corrida 10K", preco: 65.0, local:"Parque Norte", data:"18/12 07:00",
+        img:"https://images.unsplash.com/photo-1534367610401-9f99a808471d?q=80&w=1600&auto=format&fit=crop" },
+    ];
+
+    const el = sel => document.querySelector(sel);
+    const cards = el('#cards');
+    const cartCount = el('#cartCount');
+    const cartTotal = el('#cartTotal');
+    const year = el('#year');
+    const modal = el('#modal');
+    const ckTotal = el('#ckTotal');
+    const ckItems = el('#ckItems');
+
+    year.textContent = new Date().getFullYear();
+
+    function renderCards(){
+      cards.innerHTML = produtos.map(p => `
+        <article class="card">
+          <div class="thumb" style="background-image:url('${p.img}')"></div>
+          <div class="card-body">
+            <div class="badge">Atração</div>
+            <h3 style="margin:4px 0">${p.nome}</h3>
+            <div class="muted">${p.local} • ${p.data}</div>
+            <div class="row">
+              <div class="price">${BRL(p.preco)}</div>
+              <div style="display:flex; gap:8px; align-items:center">
+                <select id="qtd-${p.id}" aria-label="Quantidade">
+                  ${[1,2,3,4,5].map(q=>`<option value="${q}">${q}</option>`).join('')}
+                </select>
+                <button class="btn" onclick="add(${p.id})">Comprar</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function add(id){
+      const p = produtos.find(x=>x.id===id);
+      const qtd = parseInt(el(`#qtd-${id}`).value,10) || 1;
+      state.cart.push({id:p.id, nome:p.nome, preco:p.preco, qtd});
+      syncCart();
+    }
+
+    function syncCart(){
+      const total = state.cart.reduce((s,i)=> s + i.preco * i.qtd, 0);
+      const items = state.cart.reduce((s,i)=> s + i.qtd, 0);
+      cartCount.textContent = items;
+      cartTotal.textContent = BRL(total);
+      ckTotal.textContent = BRL(total);
+      ckItems.textContent = items;
+    }
+
+    // checkout (falso)
+    el('#btnCheckout').onclick = () => {
+      if(state.cart.length===0){ alert('Seu carrinho está vazio.'); return; }
+      modal.classList.add('open');
+    };
+    el('#btnCancel').onclick = () => modal.classList.remove('open');
+    el('#btnPay').onclick = () => {
+      const n = el('#name').value.trim();
+      const e = el('#email').value.trim();
+      if(!n || !e){ alert('Informe nome e e-mail.'); return; }
+      alert('Pagamento aprovado (simulado). Obrigado!');
+      state.cart = []; syncCart(); modal.classList.remove('open');
+    };
+
+    renderCards(); syncCart();
+  </script>
+</body>
+</html>
