@@ -21,4 +21,4 @@ jobs:
         script: |
           whoami
           ls -al
-          lsof -i tcp:22
+          sudo lsof -i tcp:22
