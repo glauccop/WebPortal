@@ -31,7 +31,7 @@ jobs:
           
   deploy-desenvolvimento:
     runs-on: ubuntu-latest
-    needs: docker
+    #needs: docker
     steps:
     - name: Run commands on remote host
       uses: appleboy/ssh-action@v1.0.3
