@@ -28,7 +28,8 @@ spec:
     spec:
       containers:
         - name: web
-          image: DOCKERHUB_USER/eventos-static:latest
+          image: glauccop/eventos-static:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           readinessProbe:
