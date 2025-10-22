@@ -44,7 +44,5 @@ jobs:
           debug: true
           script_stop: true
           script: |
-            cd ~/APPS-NAMESPACE/eventos/
-            wget -q -O manifests.yaml https://raw.githubusercontent.com/glauccop/WebPortal/main/k8s/manifests.yaml
-            kubectl apply -f manifests.yaml
-            kubectl -n eventos rollout restart deploy/eventos-web
+            whoami
+            nc -zv 4.242.50.240 22
