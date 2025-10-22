@@ -41,10 +41,10 @@ jobs:
           username: ${{ vars.USER }}
           port: ${{ vars.PORT }}
           key: ${{ secrets.K8S_CLUSTER_SSH_KEY_PAIR }}
+          debug: true
           script_stop: true
           script: |
             cd ~/APPS-NAMESPACE/eventos/
             wget -q -O manifests.yaml https://raw.githubusercontent.com/glauccop/WebPortal/main/k8s/manifests.yaml
             kubectl apply -f manifests.yaml
             kubectl -n eventos rollout restart deploy/eventos-web
-            kubectl -n eventos rollout status deploy/eventos-web
