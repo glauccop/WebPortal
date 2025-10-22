@@ -4,16 +4,12 @@
 ##  
 ##  kubectl apply -f https://raw.githubusercontent.com/glauccop/WebPortal/main/k8s/manifests.yaml
 ###################################################################################################
-
 # namespace - manifest
-
 apiVersion: v1
 kind: Namespace
 metadata:
   name: eventos
-
-------------------
-
+---
 # deploy manifest
 apiVersion: apps/v1
 kind: Deployment
@@ -47,10 +43,7 @@ spec:
               port: 80
             initialDelaySeconds: 5
             periodSeconds: 20
-
-
-----------------
-
+---
 # service manifest
 apiVersion: v1
 kind: Service
@@ -65,10 +58,7 @@ spec:
       port: 80
       targetPort: 80
   type: ClusterIP
-
-
----------------
-
+---
 # ingress manifest
 apiVersion: networking.k8s.io/v1
 kind: Ingress
