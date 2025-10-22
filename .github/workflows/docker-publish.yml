@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  docker:
+  #docker:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -44,4 +44,4 @@ jobs:
         script_stop: true
         script: |
           whoami
-          nc -zv 4.242.50.240 22
+          ls -al
