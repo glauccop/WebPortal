@@ -1,0 +1,23 @@
+name: Teste de SSH
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:  
+  deploy-desenvolvimento:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run commands on remote host
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ vars.HOST }}
+        username: ${{ vars.USER }}
+        port: ${{ vars.PORT }}
+        key: ${{ secrets.K8S_CLUSTER_SSH_KEY_PAIR }}
+        debug: true
+        script_stop: true
+        script: |
+          whoami
+          ls -al
