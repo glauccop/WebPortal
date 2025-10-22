@@ -43,5 +43,8 @@ jobs:
         debug: true
         script_stop: true
         script: |
-          whoami
-          ls -al
+          cd ~/APPS-NAMESPACE/eventos/
+          wget -q --show-progress --progress=bar:force:noscroll -O manifests.yaml https://raw.githubusercontent.com/glauccop/WebPortal/main/k8s/manifests.yaml
+          kubectl apply -f manifests.yaml
+          kubectl -n eventos rollout restart deploy/eventos-web
+          kubectl -n eventos rollout status deploy/eventos-web
